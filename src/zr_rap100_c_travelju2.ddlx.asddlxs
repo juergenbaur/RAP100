@@ -7,6 +7,7 @@
     description: { type: #STANDARD, value: 'TravelID' } //case-sensitive
     }
   }
+    
 annotate view ZR_RAP100_C_TRAVELJU2 with
 {
   @UI.facet: [ {
