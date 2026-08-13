@@ -1,5 +1,8 @@
 
 # Wir sind jetzt hier:
+## Exercises 6: Enhance the BO Behavior – Actions
+https://github.com/SAP-samples/abap-platform-rap100/blob/main/exercises/ex06/README.md
+
 ## Exercise 5: Enhance the BO Behavior – Validations
 https://github.com/SAP-samples/abap-platform-rap100/blob/main/exercises/ex05/README.md
 
