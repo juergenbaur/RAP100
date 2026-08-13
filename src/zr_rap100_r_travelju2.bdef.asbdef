@@ -22,16 +22,30 @@ early numbering
   LocalLastChangedAt,
   LastChangedAt;
 
+
+  field ( mandatory )
+  CustomerID,
+  BeginDate,
+  EndDate;
+
   determination setStatusToOpen on modify { create; }
+
+  validation validateCustomer on save { create; field CustomerID; }
+  validation validateDates on save { create; field BeginDate, EndDate; }
+
   create;
   update;
   delete;
+
 
   draft action Activate optimized;
   draft action Discard;
   draft action Edit;
   draft action Resume;
-  draft determine action Prepare;
+  draft determine action Prepare
+  {
+    validation validateCustomer;
+    validation validateDates; }
 
   mapping for zrap100_atravju2 corresponding extensible
     {
