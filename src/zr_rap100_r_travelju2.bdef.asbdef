@@ -22,6 +22,7 @@ early numbering
   LocalLastChangedAt,
   LastChangedAt;
 
+  determination setStatusToOpen on modify { create; }
   create;
   update;
   delete;
