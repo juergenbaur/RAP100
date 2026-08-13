@@ -1,0 +1,20 @@
+projection implementation in class ZBP_C_RAP100_ATRAVJU2 unique;
+strict ( 2 );
+extensible;
+use draft;
+use side effects;
+define behavior for ZR_RAP100_C_TRAVELJU2 alias Travel
+extensible
+use etag
+{
+  use create;
+  use update;
+  use delete;
+
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+
+}
