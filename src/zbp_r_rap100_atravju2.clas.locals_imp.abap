@@ -21,6 +21,8 @@ CLASS lhc_zr_rap100_r_travelju2 DEFINITION INHERITING FROM cl_abap_behavior_hand
 
     METHODS validateDates FOR VALIDATE ON SAVE
       IMPORTING keys FOR Travel~validateDates.
+    METHODS deductDiscount FOR MODIFY
+       keys FOR ACTION Travel~deductDiscount RESULT result.
 ENDCLASS.
 
 CLASS lhc_zr_rap100_r_travelju2 IMPLEMENTATION.
@@ -221,7 +223,7 @@ CLASS lhc_zr_rap100_r_travelju2 IMPLEMENTATION.
 
         APPEND VALUE #( %tky               = travel-%tky
                         %state_area        = 'VALIDATE_DATES'
-                         %msg                = NEW /dmo/cm_flight_messages(
+                        %msg               = NEW /dmo/cm_flight_messages(
                                                                 textid   = /dmo/cm_flight_messages=>enter_end_date
                                                                 severity = if_abap_behv_message=>severity-error )
                         %element-EndDate   = if_abap_behv=>mk-on ) TO reported-travel.
@@ -242,6 +244,47 @@ CLASS lhc_zr_rap100_r_travelju2 IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
 
+  ENDMETHOD.
+
+  METHOD deductDiscount.
+**************************************************************************
+* Instance-bound non-factory action:
+* Deduct the specified discount from the booking fee (BookingFee)
+**************************************************************************
+    DATA travels_for_update TYPE TABLE FOR UPDATE zr_rap100_r_travelju2.
+    DATA(keys_with_valid_discount) = keys.
+
+    " read relevant travel instance data (only booking fee)
+    READ ENTITIES OF zr_rap100_r_travelju2 IN LOCAL MODE
+        ENTITY Travel
+        FIELDS ( BookingFee )
+        WITH CORRESPONDING #( keys_with_valid_discount )
+        RESULT DATA(travels).
+
+    LOOP AT travels ASSIGNING FIELD-SYMBOL(<travel>).
+      DATA(reduced_fee) = <travel>-BookingFee * ( 1 - 3 / 10 ) .
+
+      APPEND VALUE #( %tky       = <travel>-%tky
+                    BookingFee = reduced_fee
+                  ) TO travels_for_update.
+    ENDLOOP.
+
+    " update data with reduced fee
+    MODIFY ENTITIES OF zr_rap100_r_travelju2 IN LOCAL MODE
+        ENTITY Travel
+        UPDATE FIELDS ( BookingFee )
+        WITH travels_for_update.
+
+    " read changed data for action result
+    READ ENTITIES OF zr_rap100_r_travelju2 IN LOCAL MODE
+        ENTITY Travel
+        ALL FIELDS WITH
+        CORRESPONDING #( travels )
+        RESULT DATA(travels_with_discount).
+
+    " set action result
+    result = VALUE #( FOR travel IN travels_with_discount ( %tky   = travel-%tky
+                                                              %param = travel ) ).
   ENDMETHOD.
 
 ENDCLASS.
