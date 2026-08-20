@@ -1,5 +1,7 @@
 
 # Wir sind jetzt hier:
+## Exercises 8: Write an ABAP Unit Test for the RAP BO
+https://github.com/SAP-samples/abap-platform-rap100/blob/main/exercises/ex08/README.md
 ## Exercises 7: Enhance the BO Behavior – Dynamic Feature Control
 https://github.com/SAP-samples/abap-platform-rap100/blob/main/exercises/ex07/README.md
 ## Exercises 6: Enhance the BO Behavior – Actions
